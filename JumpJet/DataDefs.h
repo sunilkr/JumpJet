@@ -23,6 +23,6 @@ typedef struct __DLLINFO
 {
 	LPVOID	DllBase;
 	DWORD	TextOffset;
-	HANDLE	hDllMapping;
+	LPVOID	DllMapping;
 	CHAR	Path[MAX_PATH];	
 } DLLINFO, *PDLLINFO;
