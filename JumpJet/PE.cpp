@@ -1,9 +1,14 @@
 #include <Windows.h>
 #include "PE.h"
 
-PBYTE GetProcBytes(LPVOID lpProcAddress, DLLINFO DllInfo)
+DWORD GetProcBytes(LPVOID lpProcAddress, DLLINFO DllInfo, PFUNCTIONDATA pFunction)
 {
-	
+	LPVOID Address = (LPVOID)((DWORD)lpProcAddress - ((DWORD)DllInfo.DllBase + DllInfo.TextOffset));
+	INT cbInstr = rand()%5 + 1;
+	INT cbBytes = GetInstrSize(Address, cbInstr);
+	pFunction->CodeSize = cbBytes;
+	CopyMemory(pFunction->CodeBytes, Address, cbBytes);
+	return cbBytes;
 }
 
 LPVOID MapDllToMemory(LPSTR Path)
@@ -19,5 +24,4 @@ LPVOID MapDllToMemory(LPSTR Path)
 	}
 	return Map;
 }
-
 

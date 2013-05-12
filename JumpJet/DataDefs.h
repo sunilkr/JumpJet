@@ -13,9 +13,9 @@
 
 typedef struct __FUNCTIONDATA
 {
-	LPVOID	ProcAddress;
-	DWORD	CodeSize;
-	BYTE	CodeBytes[25];
+	LPVOID	 ProcAddress;
+	DWORD	 CodeSize;
+	BYTE	 CodeBytes[25];
 	PDLLINFO pDll;
 } FUNCTIONDATA, *PFUNCTIONDATA;
 
