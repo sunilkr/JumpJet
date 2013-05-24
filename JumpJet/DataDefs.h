@@ -10,6 +10,7 @@
 #define IDX_KERNEL32	0
 #define	IDX_NTDLL		1
 
+#define IMG_NO_DOS_HDR	0x8000
 
 typedef struct __FUNCTIONDATA
 {

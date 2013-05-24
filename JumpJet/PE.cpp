@@ -14,7 +14,7 @@ DWORD GetProcBytes(LPVOID lpProcAddress, DLLINFO DllInfo, PFUNCTIONDATA pFunctio
 LPVOID MapDllToMemory(LPSTR Path)
 {
 	HANDLE Handle = CreateFile(Path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL| FILE_ATTRIBUTE_SYSTEM, NULL);
-	LPVOID Map;
+	LPVOID Map=NULL;
 
 	if(Handle != INVALID_HANDLE_VALUE)
 	{
@@ -25,3 +25,14 @@ LPVOID MapDllToMemory(LPSTR Path)
 	return Map;
 }
 
+DWORD GetDllTextOffset(LPVOID DllMapping)
+{
+	PIMAGE_DOS_HEADER DosHdr = (PIMAGE_DOS_HEADER)DllMapping;
+	if(DosHdr->e_magic != IMAGE_DOS_SIGNATURE)
+		return IMG_NO_DOS_HDR;
+
+	PIMAGE_NT_HEADERS NtHdr = (PIMAGE_NT_HEADERS)((LONG)DosHdr + DosHdr->e_lfanew);
+	DWORD dwSections = NtHdr->FileHeader.NumberOfSections;
+
+	IMAGE_SECTION_HEADER FirstSection = 
+}
