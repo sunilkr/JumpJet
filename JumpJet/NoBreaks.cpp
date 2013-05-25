@@ -21,7 +21,7 @@ DWORD InitDllInfo()
 		{
 			diTemp.DllBase = ModuleInfo.lpBaseOfDll;
 			int size = GetModuleFileName(hModule, diTemp.Path, MAX_PATH);
-			diTemp.TextOffset = GetDllTextOffset(diTemp.Path);
+			diTemp.TextOffset = GetDllTextOffset(diTemp.Path)->PointerToRawData;
 			diTemp.DllMapping = MapDllToMemory(diTemp.Path);
 		}
 

@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <string.h>
 #include "PE.h"
 
 DWORD GetProcBytes(LPVOID lpProcAddress, DLLINFO DllInfo, PFUNCTIONDATA pFunction)
@@ -25,14 +26,28 @@ LPVOID MapDllToMemory(LPSTR Path)
 	return Map;
 }
 
-DWORD GetDllTextOffset(LPVOID DllMapping)
+PIMAGE_SECTION_HEADER GetDllTextOffset(LPVOID DllMapping)
 {
 	PIMAGE_DOS_HEADER DosHdr = (PIMAGE_DOS_HEADER)DllMapping;
 	if(DosHdr->e_magic != IMAGE_DOS_SIGNATURE)
-		return IMG_NO_DOS_HDR;
+		return NULL;
 
 	PIMAGE_NT_HEADERS NtHdr = (PIMAGE_NT_HEADERS)((LONG)DosHdr + DosHdr->e_lfanew);
 	DWORD dwSections = NtHdr->FileHeader.NumberOfSections;
 
-	IMAGE_SECTION_HEADER FirstSection = 
+	PIMAGE_SECTION_HEADER FirstSection = (PIMAGE_SECTION_HEADER)((LONG)DllMapping + sizeof(IMAGE_NT_HEADERS)); // FIXIT:: Smells Bad
+
+	PIMAGE_SECTION_HEADER ThisSection = FirstSection;
+	DWORD i = 0;
+	for(; i < dwSections; i++)
+	{
+		if(strnicmp((PCHAR)ThisSection->Name,".TEXT",8))
+			break;
+		else
+			ThisSection++;
+	}
+
+	if( i < dwSections)
+		return ThisSection;
+	return NULL;
 }
