@@ -20,11 +20,13 @@ DWORD InitDllInfo()
 		if( GetModuleInformation(NULL, hModule, &ModuleInfo, sizeof(MODULEINFO)))
 		{
 			diTemp.DllBase = ModuleInfo.lpBaseOfDll;
+			
 			int size = GetModuleFileName(hModule, diTemp.Path, MAX_PATH);
-			diTemp.TextOffset = GetDllTextOffset(diTemp.Path)->PointerToRawData;
+			PIMAGE_SECTION_HEADER TxtSection = GetDllTextOffset(diTemp.Path);
+			diTemp.TextOffset = TxtSection->PointerToRawData;
+			diTemp.TextRVA = TxtSection->VirtualAddress;
 			diTemp.DllMapping = MapDllToMemory(diTemp.Path);
 		}
-
 		DllInfo[i] = diTemp;
 	}
 }

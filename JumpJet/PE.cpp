@@ -26,6 +26,7 @@ LPVOID MapDllToMemory(LPSTR Path)
 	return Map;
 }
 
+//This funtion works
 PIMAGE_SECTION_HEADER GetDllTextOffset(LPVOID DllMapping)
 {
 	PIMAGE_DOS_HEADER DosHdr = (PIMAGE_DOS_HEADER)DllMapping;
@@ -34,14 +35,14 @@ PIMAGE_SECTION_HEADER GetDllTextOffset(LPVOID DllMapping)
 
 	PIMAGE_NT_HEADERS NtHdr = (PIMAGE_NT_HEADERS)((LONG)DosHdr + DosHdr->e_lfanew);
 	DWORD dwSections = NtHdr->FileHeader.NumberOfSections;
-
-	PIMAGE_SECTION_HEADER FirstSection = (PIMAGE_SECTION_HEADER)((LONG)DllMapping + sizeof(IMAGE_NT_HEADERS)); // FIXIT:: Smells Bad
+	
+	PIMAGE_SECTION_HEADER FirstSection = (PIMAGE_SECTION_HEADER)((LONG)NtHdr + sizeof(IMAGE_NT_HEADERS)); // Works
 
 	PIMAGE_SECTION_HEADER ThisSection = FirstSection;
 	DWORD i = 0;
 	for(; i < dwSections; i++)
 	{
-		if(strnicmp((PCHAR)ThisSection->Name,".TEXT",8))
+		if(!strnicmp((PCHAR)ThisSection->Name,".TEXT",5))
 			break;
 		else
 			ThisSection++;
